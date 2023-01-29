@@ -22,12 +22,12 @@
 
 import Cocoa
 
-protocol PreferencePaneSelectionController: class {
+protocol PreferencePaneSelectionController: AnyObject {
    var selectedPreferencePaneIdentifier: PreferencePaneIdentifier { get set }
 
    var delegate: PreferencePaneSelectionControllerDelegate? { get set }
 }
 
-protocol PreferencePaneSelectionControllerDelegate: class {
+protocol PreferencePaneSelectionControllerDelegate: AnyObject {
    func preferencePaneSelectionControllerDidChangeSelectedPreferencePaneIdentifier(_ selectionController: PreferencePaneSelectionController)
 }
