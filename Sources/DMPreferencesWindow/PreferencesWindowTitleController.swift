@@ -74,14 +74,8 @@ class PreferencesWindowTitleController {
       if let title = title {
          window.title = title
       } else {
-         let appName = NSRunningApplication.current.localizedName ?? NSLocalizedString("App",
-                                                                                       bundle: .module,
-                                                                                       comment: "A generic placeholder for the app name to be shown in the preferences window title if the app name could not be found.")
-         window.title = String(format: NSLocalizedString("%1$@ Preferences",
-                                                         bundle: .module,
-                                                         comment: "The format string for building a generic title for the preferences window. Argument 1 is the app name."),
-                               locale: Locale.current,
-                               appName)
+          let appName = NSRunningApplication.current.localizedName!
+          window.title = String.localizedStringWithFormat("%@ Preferences", appName)
       }
    }
 }

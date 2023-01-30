@@ -136,9 +136,8 @@ class ToolbarPreferencePaneSelectionController: NSObject, PreferencePaneSelectio
    // MARK: - Responding to Title Changes
 
    private static func title(from viewController: NSViewController) -> String {
-      return viewController.title ?? NSLocalizedString("Preferences",
-                                                       bundle: .module,
-                                                       comment: "The title of the toolbar item in the preferences window if no custom title is given.")
+       let appName = NSRunningApplication.current.localizedName!
+       return viewController.title ?? String.localizedStringWithFormat("%@ Preferences", appName)
    }
 
    private func titleDidChange(forViewControllerAt idx: Int) {
