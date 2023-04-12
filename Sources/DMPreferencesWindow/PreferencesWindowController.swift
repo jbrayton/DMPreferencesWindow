@@ -62,7 +62,7 @@ open class PreferencesWindowController: NSWindowController, PreferencePaneSelect
                 shouldUsePreferencePaneTitleForWindowTitle: false)
    }
 
-   private static func makeWindow() -> NSWindow {
+   static func makeWindow() -> NSWindow {
       let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1, height: 1),
                             styleMask: [.closable, .titled],
                             backing: .buffered,

@@ -22,11 +22,11 @@
 
 import Cocoa
 
-struct PreferencePaneViewControllers: RandomAccessCollection {
+public struct PreferencePaneViewControllers: RandomAccessCollection {
    // MARK: - Typealiases
 
-   typealias Element = NSViewController & PreferencePane
-   typealias Index = Array<Element>.Index
+    public typealias Element = NSViewController & PreferencePane
+    public typealias Index = Array<Element>.Index
 
    // MARK: - Private Properties
 
@@ -58,15 +58,15 @@ struct PreferencePaneViewControllers: RandomAccessCollection {
 
    // MARK: - RandomAccessCollection Conformance
 
-   var startIndex: Index {
+   public var startIndex: Index {
       return viewControllers.startIndex
    }
 
-   var endIndex: Index {
+   public var endIndex: Index {
       return viewControllers.endIndex
    }
 
-   subscript(position: Index) -> Element {
+   public subscript(position: Index) -> Element {
       return viewControllers[position]
    }
 
@@ -81,11 +81,11 @@ struct PreferencePaneViewControllers: RandomAccessCollection {
    }
 }
 
-struct PreferencePaneViewControllersWithToolbarItemImages: RandomAccessCollection {
+public struct PreferencePaneViewControllersWithToolbarItemImages: RandomAccessCollection {
    // MARK: - Typealiases
 
-   typealias Element = NSViewController & PreferencePane & ToolbarItemImageProvider
-   typealias Index = PreferencePaneViewControllers.Index
+   public typealias Element = NSViewController & PreferencePane & ToolbarItemImageProvider
+    public typealias Index = PreferencePaneViewControllers.Index
 
    // MARK: - Private Properties
 
@@ -99,15 +99,15 @@ struct PreferencePaneViewControllersWithToolbarItemImages: RandomAccessCollectio
 
    // MARK: - RandomAccessCollection Conformance
 
-   var startIndex: Index {
+    public var startIndex: Index {
       return underlyingViewControllers.startIndex
    }
 
-   var endIndex: Index {
+    public var endIndex: Index {
       return underlyingViewControllers.endIndex
    }
 
-   subscript(position: Index) -> Element {
+    public subscript(position: Index) -> Element {
       return underlyingViewControllers[position] as! Element
    }
 
