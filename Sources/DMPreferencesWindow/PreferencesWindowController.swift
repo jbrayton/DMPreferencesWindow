@@ -32,41 +32,39 @@ open class PreferencesWindowController: NSWindowController, PreferencePaneSelect
 
    // MARK: - Initialization
 
-   public convenience init(preferencePaneViewControllers: [NSViewController & PreferencePane & ToolbarItemImageProvider]) {
-      if preferencePaneViewControllers.count == 1 {
-         self.init(preferencePaneViewController: preferencePaneViewControllers[0])
-         return
-      }
+    public init(preferencePaneViewControllers: [NSViewController & PreferencePane & ToolbarItemImageProvider], restorationClass: (any NSWindowRestoration.Type)?) {
+        let window = PreferencesWindowController.makeWindow(restorationClass: restorationClass)
+        let viewControllers = PreferencePaneViewControllersWithToolbarItemImages(viewControllers: preferencePaneViewControllers)
 
-      let window = PreferencesWindowController.makeWindow()
-      let viewControllers = PreferencePaneViewControllersWithToolbarItemImages(viewControllers: preferencePaneViewControllers)
-
-      let selectionController = ToolbarPreferencePaneSelectionController(window: window,
+        let selectionController = ToolbarPreferencePaneSelectionController(window: window,
                                                                          viewControllers: viewControllers)
+        let preferencePaneViewControllers = PreferencePaneViewControllers(viewControllers)
+        self.selectionController = selectionController
+        self.windowViewController = PreferencesWindowViewController(viewControllers: preferencePaneViewControllers)
+        self.windowTitleController = PreferencesWindowTitleController(window: window,
+                                                                     viewControllers: preferencePaneViewControllers,
+                                                                     shouldUsePreferencePaneTitleForWindowTitle: true)
 
-      self.init(window: window,
-                selectionController: selectionController,
-                viewControllers: PreferencePaneViewControllers(viewControllers),
-                shouldUsePreferencePaneTitleForWindowTitle: true)
-   }
+        super.init(window: window)
 
-   /// Initializes the window controller with a single preference pane view controller.
-   ///
-   /// According to the macOS Human Interface Guidelines, the preferences window should behave differently
-   /// if there is only one preference pane: the window title should be “[App Name] Preferences” and there
-   /// should not be a toolbar.
-   private convenience init(preferencePaneViewController: NSViewController & PreferencePane) {
-      self.init(window: PreferencesWindowController.makeWindow(),
-                selectionController: SingleItemPreferencePaneSelectionController(preferencePaneIdentifier: preferencePaneViewController.preferencePaneIdentifier),
-                viewControllers: PreferencePaneViewControllers(viewControllers: [preferencePaneViewController]),
-                shouldUsePreferencePaneTitleForWindowTitle: false)
-   }
+        let initialSelectedPreferencePaneIdentifier = self.initialSelectedPreferencePaneIdentifier(viewControllers: preferencePaneViewControllers)
+        selectionController.selectedPreferencePaneIdentifier = initialSelectedPreferencePaneIdentifier
+        windowViewController.visiblePreferencePaneIdentifier = initialSelectedPreferencePaneIdentifier
+        windowTitleController.selectedPreferencePaneIdentifier = initialSelectedPreferencePaneIdentifier
+        lastViewedPreferencePaneController.lastViewedPreferencePaneIdentifier = initialSelectedPreferencePaneIdentifier
 
-   static func makeWindow() -> NSWindow {
+        selectionController.delegate = self
+    }
+
+   static func makeWindow(restorationClass: (any NSWindowRestoration.Type)?) -> NSWindow {
       let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1, height: 1),
                             styleMask: [.closable, .titled],
                             backing: .buffered,
                             defer: true)
+       if let restorationClass {
+           window.isRestorable = true
+           window.restorationClass = restorationClass
+       }
       if #available(macOS 11, *) {
          window.toolbarStyle = .preference
       }
