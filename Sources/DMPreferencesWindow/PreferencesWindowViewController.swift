@@ -139,15 +139,6 @@ class PreferencesWindowViewController: NSViewController {
       // Set `isHidden` before adding the subview to the hierarchy so that `viewWillAppear`
       // will only be called once at the end of the animation.
       newVisibleSubview.isHidden = true
-      view.addSubview(newVisibleSubview)
-
-      newVisibleSubview.translatesAutoresizingMaskIntoConstraints = false
-      NSLayoutConstraint.activate([
-         newVisibleSubview.topAnchor.constraint(equalTo: view.topAnchor),
-         newVisibleSubview.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-         newVisibleSubview.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-      ])
-
       guard let window = view.window else {
          newVisibleSubview.isHidden = false
          return
@@ -167,11 +158,23 @@ class PreferencesWindowViewController: NSViewController {
 
          window.layoutIfNeeded()
           print("\(Date().timeIntervalSince1970-start) - end of runAnimationGroup")
-      }, completionHandler: {
-         let isCancelled = self.currentAnimationUUID != animationUUID
+      }, completionHandler: { [weak self] in
+         guard let self = self else {
+             return
+          }
+          let isCancelled = self.currentAnimationUUID != animationUUID
          guard !isCancelled else {
             return
          }
+          self.view.addSubview(newVisibleSubview)
+
+          newVisibleSubview.translatesAutoresizingMaskIntoConstraints = false
+          NSLayoutConstraint.activate([
+            newVisibleSubview.topAnchor.constraint(equalTo: self.view.topAnchor),
+            newVisibleSubview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            newVisibleSubview.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+          ])
+
          self.currentAnimationUUID = nil
 
          newVisibleSubview.isHidden = false
