@@ -120,6 +120,9 @@ class PreferencesWindowViewController: NSViewController {
    //   2. Animate window to new height.
    //   3. Show new subview.
    private func setVisiblePreferencePaneIdentifierWithAnimation(_ newVisiblePreferencePaneIdentifier: PreferencePaneIdentifier) {
+       guard let window = view.window else {
+          return
+       }
        let start = Date().timeIntervalSince1970
        print("\(Date().timeIntervalSince1970-start) - start of setVisiblePreferencePaneIdentifierWithAnimation")
       let oldVisibleViewController = viewControllers[visiblePreferencePaneIdentifier]
@@ -138,11 +141,10 @@ class PreferencesWindowViewController: NSViewController {
 
       // Set `isHidden` before adding the subview to the hierarchy so that `viewWillAppear`
       // will only be called once at the end of the animation.
-      newVisibleSubview.isHidden = true
-      guard let window = view.window else {
-         newVisibleSubview.isHidden = false
-         return
-      }
+       
+       let tempView = NSView(frame: newVisibleSubview.frame)
+       tempView.isHidden = true
+       self.view.addSubview(tempView)
 
       let animationUUID = UUID()
       currentAnimationUUID = animationUUID
@@ -152,22 +154,23 @@ class PreferencesWindowViewController: NSViewController {
           print("\(Date().timeIntervalSince1970-start) - in runAnimationGroup")
          let newWindowFrame = PreferencesWindowViewController.estimateFrame(for: window,
                                                                             visibleSubview: newVisibleSubview)
-          print("\(Date().timeIntervalSince1970-start) - got newWindowFrame - newWindowFrame: \(newWindowFrame), current frame: \(window.frame)")
-          let animationDuration = abs(newWindowFrame.size.height-window.frame.size.height)*0.2/150
-          context.duration = animationDuration
-          print("\(Date().timeIntervalSince1970-start) - animation duration: \(animationDuration)")
+          print("\(Date().timeIntervalSince1970-start) - got newWindowFrame")
+         context.duration = window.animationResizeTime(newWindowFrame)
          context.allowsImplicitAnimation = true
 
          window.layoutIfNeeded()
           print("\(Date().timeIntervalSince1970-start) - end of runAnimationGroup")
       }, completionHandler: { [weak self] in
-         guard let self = self else {
-             return
-          }
-          let isCancelled = self.currentAnimationUUID != animationUUID
-          guard !isCancelled else {
+          guard let self = self else {
               return
           }
+         let isCancelled = self.currentAnimationUUID != animationUUID
+         guard !isCancelled else {
+            return
+         }
+         self.currentAnimationUUID = nil
+
+          newVisibleSubview.isHidden = true
           self.view.addSubview(newVisibleSubview)
 
           newVisibleSubview.translatesAutoresizingMaskIntoConstraints = false
@@ -177,9 +180,8 @@ class PreferencesWindowViewController: NSViewController {
             newVisibleSubview.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
           ])
 
-         self.currentAnimationUUID = nil
-
          newVisibleSubview.isHidden = false
+          tempView.removeFromSuperview()
       })
    }
 
