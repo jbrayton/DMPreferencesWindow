@@ -120,6 +120,8 @@ class PreferencesWindowViewController: NSViewController {
    //   2. Animate window to new height.
    //   3. Show new subview.
    private func setVisiblePreferencePaneIdentifierWithAnimation(_ newVisiblePreferencePaneIdentifier: PreferencePaneIdentifier) {
+       let start = Date().timeIntervalSince1970
+       print("\(Date().timeIntervalSince1970-start) - start of setVisiblePreferencePaneIdentifierWithAnimation")
       let oldVisibleViewController = viewControllers[visiblePreferencePaneIdentifier]
 
       // Hack: Sometimes `viewWillDisappear` is not called inside `removeFromSuperview`.
@@ -154,13 +156,17 @@ class PreferencesWindowViewController: NSViewController {
       let animationUUID = UUID()
       currentAnimationUUID = animationUUID
 
+       print("\(Date().timeIntervalSince1970-start) - before runAnimationGroup")
       NSAnimationContext.runAnimationGroup({ context in
+          print("\(Date().timeIntervalSince1970-start) - in runAnimationGroup")
          let newWindowFrame = PreferencesWindowViewController.estimateFrame(for: window,
                                                                             visibleSubview: newVisibleSubview)
+          print("\(Date().timeIntervalSince1970-start) - got newWindowFrame")
          context.duration = window.animationResizeTime(newWindowFrame)
          context.allowsImplicitAnimation = true
 
          window.layoutIfNeeded()
+          print("\(Date().timeIntervalSince1970-start) - end of runAnimationGroup")
       }, completionHandler: {
          let isCancelled = self.currentAnimationUUID != animationUUID
          guard !isCancelled else {
