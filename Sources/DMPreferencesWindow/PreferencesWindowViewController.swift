@@ -158,7 +158,7 @@ class PreferencesWindowViewController: NSViewController {
          context.duration = window.animationResizeTime(newWindowFrame)
          context.allowsImplicitAnimation = true
 
-         window.layoutIfNeeded()
+          window.animator().setFrame(newWindowFrame, display: false)
           print("\(Date().timeIntervalSince1970-start) - end of runAnimationGroup")
       }, completionHandler: { [weak self] in
           guard let self = self else {
