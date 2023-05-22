@@ -153,7 +153,7 @@ class PreferencesWindowViewController: NSViewController {
       NSAnimationContext.runAnimationGroup({ context in
           print("\(Date().timeIntervalSince1970-start) - in runAnimationGroup")
          let newWindowFrame = PreferencesWindowViewController.estimateFrame(for: window,
-                                                                            visibleSubview: newVisibleSubview)
+                                                                            visibleSubview: tempView)
           print("\(Date().timeIntervalSince1970-start) - got newWindowFrame")
          context.duration = window.animationResizeTime(newWindowFrame)
          context.allowsImplicitAnimation = true
