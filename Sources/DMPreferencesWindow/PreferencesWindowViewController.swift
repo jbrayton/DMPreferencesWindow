@@ -152,7 +152,7 @@ class PreferencesWindowViewController: NSViewController {
           print("\(Date().timeIntervalSince1970-start) - in runAnimationGroup")
          let newWindowFrame = PreferencesWindowViewController.estimateFrame(for: window,
                                                                             visibleSubview: newVisibleSubview)
-          print("\(Date().timeIntervalSince1970-start) - got newWindowFrame - newWindowFrame: \(newWindowFrame)")
+          print("\(Date().timeIntervalSince1970-start) - got newWindowFrame - newWindowFrame: \(newWindowFrame), current frame: \(window.frame)")
          let animationDuration = window.animationResizeTime(newWindowFrame)
           context.duration = animationDuration
           print("\(Date().timeIntervalSince1970-start) - animation duration: \(animationDuration)")
@@ -165,9 +165,9 @@ class PreferencesWindowViewController: NSViewController {
              return
           }
           let isCancelled = self.currentAnimationUUID != animationUUID
-         guard !isCancelled else {
-            return
-         }
+          guard !isCancelled else {
+              return
+          }
           self.view.addSubview(newVisibleSubview)
 
           newVisibleSubview.translatesAutoresizingMaskIntoConstraints = false
