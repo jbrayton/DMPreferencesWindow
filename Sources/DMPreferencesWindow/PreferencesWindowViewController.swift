@@ -144,6 +144,13 @@ class PreferencesWindowViewController: NSViewController {
        
        let tempView = NSView(frame: newVisibleSubview.frame)
        tempView.isHidden = true
+       tempView.translatesAutoresizingMaskIntoConstraints = false
+       NSLayoutConstraint.activate([
+        tempView.topAnchor.constraint(equalTo: self.view.topAnchor),
+        tempView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+        tempView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+        tempView.heightAnchor.constraint(equalToConstant: newVisibleSubview.fittingSize.height)
+       ])
        self.view.addSubview(tempView)
 
       let animationUUID = UUID()
@@ -158,7 +165,7 @@ class PreferencesWindowViewController: NSViewController {
          context.duration = window.animationResizeTime(newWindowFrame)
          context.allowsImplicitAnimation = true
 
-          window.animator().setFrame(newWindowFrame, display: false)
+          window.layoutIfNeeded()
           print("\(Date().timeIntervalSince1970-start) - end of runAnimationGroup")
       }, completionHandler: { [weak self] in
           guard let self = self else {
