@@ -145,13 +145,13 @@ class PreferencesWindowViewController: NSViewController {
        let tempView = NSView(frame: newVisibleSubview.frame)
        tempView.isHidden = true
        tempView.translatesAutoresizingMaskIntoConstraints = false
+       self.view.addSubview(tempView)
        NSLayoutConstraint.activate([
         tempView.topAnchor.constraint(equalTo: self.view.topAnchor),
         tempView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
         tempView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
         tempView.heightAnchor.constraint(equalToConstant: newVisibleSubview.fittingSize.height)
        ])
-       self.view.addSubview(tempView)
 
       let animationUUID = UUID()
       currentAnimationUUID = animationUUID
