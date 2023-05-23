@@ -124,7 +124,6 @@ class PreferencesWindowViewController: NSViewController {
           return
        }
        let start = Date().timeIntervalSince1970
-       print("\(Date().timeIntervalSince1970-start) - start of setVisiblePreferencePaneIdentifierWithAnimation")
       let oldVisibleViewController = viewControllers[visiblePreferencePaneIdentifier]
 
       // Hack: Sometimes `viewWillDisappear` is not called inside `removeFromSuperview`.
@@ -142,6 +141,10 @@ class PreferencesWindowViewController: NSViewController {
       // Set `isHidden` before adding the subview to the hierarchy so that `viewWillAppear`
       // will only be called once at the end of the animation.
        
+       // Create a "tempView" that has the desired height. This makes `window.layoutIfNeeded()`
+       // resize as needed. We later remove this tempView, replacing it with `newVisibleSubview`.
+       // Using tempView instead of newVisibleSubview avoids the resize being stuttery. I think
+       // the janky resizing was from SwiftUI resizing the subview during the animation.
        let tempView = NSView(frame: newVisibleSubview.frame)
        tempView.isHidden = true
        tempView.translatesAutoresizingMaskIntoConstraints = false
@@ -156,17 +159,13 @@ class PreferencesWindowViewController: NSViewController {
       let animationUUID = UUID()
       currentAnimationUUID = animationUUID
 
-       print("\(Date().timeIntervalSince1970-start) - before runAnimationGroup")
       NSAnimationContext.runAnimationGroup({ context in
-          print("\(Date().timeIntervalSince1970-start) - in runAnimationGroup")
          let newWindowFrame = PreferencesWindowViewController.estimateFrame(for: window,
                                                                             visibleSubview: tempView)
-          print("\(Date().timeIntervalSince1970-start) - got newWindowFrame")
          context.duration = window.animationResizeTime(newWindowFrame)
          context.allowsImplicitAnimation = true
 
           window.layoutIfNeeded()
-          print("\(Date().timeIntervalSince1970-start) - end of runAnimationGroup")
       }, completionHandler: { [weak self] in
           guard let self = self else {
               return
