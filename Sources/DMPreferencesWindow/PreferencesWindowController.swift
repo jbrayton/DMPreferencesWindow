@@ -27,7 +27,7 @@ open class PreferencesWindowController: NSWindowController, PreferencePaneSelect
 
    private let lastViewedPreferencePaneController = LastViewedPreferencePaneController()
    private let selectionController: PreferencePaneSelectionController
-   private let windowViewController: PreferencesWindowViewController
+   public let windowViewController: PreferencesWindowViewController
    private var windowTitleController: PreferencesWindowTitleController
 
    // MARK: - Initialization

@@ -22,7 +22,7 @@
 
 import Cocoa
 
-class PreferencesWindowViewController: NSViewController {
+public class PreferencesWindowViewController: NSViewController {
    // MARK: - Private Properties
 
    private let viewControllers: PreferencePaneViewControllers
@@ -45,11 +45,11 @@ class PreferencesWindowViewController: NSViewController {
       fatalError("init(coder:) has not been implemented")
    }
 
-   override func loadView() {
+    public override func loadView() {
       view = NSView(frame: NSRect(x: 0, y: 0, width: 1, height: 1))
    }
 
-   override func viewDidLoad() {
+    public override func viewDidLoad() {
       super.viewDidLoad()
 
       setVisiblePreferencePaneIdentifierWithoutAnimation(visiblePreferencePaneIdentifier)
@@ -123,7 +123,6 @@ class PreferencesWindowViewController: NSViewController {
        guard let window = view.window else {
           return
        }
-       let start = Date().timeIntervalSince1970
       let oldVisibleViewController = viewControllers[visiblePreferencePaneIdentifier]
 
       // Hack: Sometimes `viewWillDisappear` is not called inside `removeFromSuperview`.
