@@ -109,22 +109,22 @@ open class PreferencesWindowController: NSWindowController, PreferencePaneSelect
 
    // MARK: - Showing the Window
 
-   public var hasBeenShown = false
-
-   open override func showWindow(_ sender: Any?) {
-      super.showWindow(sender)
-
-      if !hasBeenShown {
-         hasBeenShown = true
-
-         if let window = window {
-            window.contentViewController = windowViewController
-            window.makeFirstResponder(nil)
-            window.layoutIfNeeded()
-            window.center()
-         }
-      }
-   }
+//   public var hasBeenShown = false
+//
+//   open override func showWindow(_ sender: Any?) {
+//      super.showWindow(sender)
+//
+//      if !hasBeenShown {
+//         hasBeenShown = true
+//
+//         if let window = window {
+//            window.contentViewController = windowViewController
+//            window.makeFirstResponder(nil)
+//            window.layoutIfNeeded()
+//            window.center()
+//         }
+//      }
+//   }
 
    public func showWindow(selecting preferencePaneIdentifier: PreferencePaneIdentifier) {
       selectionController.selectedPreferencePaneIdentifier = preferencePaneIdentifier
