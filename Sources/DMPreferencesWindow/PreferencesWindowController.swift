@@ -109,9 +109,9 @@ open class PreferencesWindowController: NSWindowController, PreferencePaneSelect
 
    // MARK: - Showing the Window
 
-   private var hasBeenShown = false
+   public var hasBeenShown = false
 
-   public override func showWindow(_ sender: Any?) {
+   open override func showWindow(_ sender: Any?) {
       super.showWindow(sender)
 
       if !hasBeenShown {
