@@ -29,6 +29,10 @@ open class PreferencesWindowController: NSWindowController, PreferencePaneSelect
    private let selectionController: PreferencePaneSelectionController
    public let windowViewController: PreferencesWindowViewController
    private var windowTitleController: PreferencesWindowTitleController
+    
+    public var visiblePreferencePaneIdentifier: PreferencePaneIdentifier {
+        return self.windowViewController.visiblePreferencePaneIdentifier
+    }
 
    // MARK: - Initialization
 
