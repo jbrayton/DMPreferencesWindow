@@ -155,19 +155,23 @@ public class PreferencesWindowViewController: NSViewController {
         tempView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
         tempView.heightAnchor.constraint(equalToConstant: newVisibleSubview.fittingSize.height)
        ])
+       print("newVisibleSubview.fittingSize.height: \(newVisibleSubview.fittingSize.height)")
 
       let animationUUID = UUID()
       currentAnimationUUID = animationUUID
 
+       
       NSAnimationContext.runAnimationGroup({ context in
          let newWindowFrame = PreferencesWindowViewController.estimateFrame(for: window,
                                                                             visibleSubview: tempView)
+          print("newWindowFrame.height: \(newWindowFrame.height)")
          context.duration = window.animationResizeTime(newWindowFrame)
          context.allowsImplicitAnimation = true
 
           window.layoutIfNeeded()
       }, completionHandler: { [weak self] in
           guard let self = self else {
+              tempView.removeFromSuperview()
               return
           }
          let isCancelled = self.currentAnimationUUID != animationUUID
