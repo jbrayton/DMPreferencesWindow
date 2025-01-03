@@ -104,6 +104,7 @@ public class PreferencesWindowViewController: NSViewController {
 
       currentAnimationUUID = nil
 
+       self.view.window?.contentView?.layer?.removeAllAnimations()
       if animated {
          setVisiblePreferencePaneIdentifierWithAnimation(newVisiblePreferencePaneIdentifier)
       } else {
