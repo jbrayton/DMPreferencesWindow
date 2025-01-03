@@ -155,7 +155,6 @@ public class PreferencesWindowViewController: NSViewController {
         tempView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
         tempView.heightAnchor.constraint(equalToConstant: newVisibleSubview.fittingSize.height)
        ])
-       print("newVisibleSubview.fittingSize.height: \(newVisibleSubview.fittingSize.height)")
 
       let animationUUID = UUID()
       currentAnimationUUID = animationUUID
@@ -164,14 +163,11 @@ public class PreferencesWindowViewController: NSViewController {
       NSAnimationContext.runAnimationGroup({ context in
          let newWindowFrame = PreferencesWindowViewController.estimateFrame(for: window,
                                                                             visibleSubview: tempView)
-          print("newWindowFrame.height: \(newWindowFrame.height)")
          context.duration = window.animationResizeTime(newWindowFrame)
          context.allowsImplicitAnimation = true
 
           window.layoutIfNeeded()
-          print("at running")
       }, completionHandler: { [weak self] in
-          print("at completion handler")
           guard let self = self else {
               return
           }
