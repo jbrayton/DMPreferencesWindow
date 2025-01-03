@@ -169,13 +169,15 @@ public class PreferencesWindowViewController: NSViewController {
          context.allowsImplicitAnimation = true
 
           window.layoutIfNeeded()
+          print("at running")
       }, completionHandler: { [weak self] in
+          print("at completion handler")
           guard let self = self else {
-              tempView.removeFromSuperview()
               return
           }
          let isCancelled = self.currentAnimationUUID != animationUUID
          guard !isCancelled else {
+             tempView.removeFromSuperview()
             return
          }
          self.currentAnimationUUID = nil
